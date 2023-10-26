@@ -1,22 +1,54 @@
 # ATM RecoverFund Contract
 
-
 ## Contratc Details
-### 1. RecoverFund 
-#### Reade Functions
-##### 1.1 totalFund
-##### 1.2 endTime
 
-#### Write Functions
----
-### 2. Staker
-#### Reade Functions
-#### Write Functions
+### 1. RecoverFund
 
-
-
-## Test Env 
+```js
+    struct Proposal{
+        address sender;   
+        uint256 cost;     
+        uint256 expire;
+        uint256 line;
+        address[] agree;
+        address[] disagree;
+        uint256 statu; //0: pending; 1: passed; 2: unpassed
+    }
 ```
+
+#### Reade Functions
+
+**1.1 totalFund**: return a `uint256` number that represents how much `USDC` have been fund
+
+**1.2 endTime**: return a `uint256` number that is a timestemp of activit end
+
+**1.3 investOf**:  `investOf(address)` query funded amount by address
+
+**1.4 pId**:  return a `uint256` number that represents how much `Proposal` have been sent
+
+**1.5 proposal**: `proposal(uint256)` query a `Proposal` infomation by `pId`
+
+#### Write Functions
+
+**1.8 deny**: `deny(address)` rely a address, then that can sent and vote proposal
+
+**1.8 rely**: `rely(address)` rely a address
+
+**1.8 sentProposal**: `sentProposal(uint256)` sent a buyback proposal
+
+**1.8 vote**: `vote(bool)` vote for new proposal
+
+---
+
+### 2. Staker
+
+#### Reade Functions
+
+#### Write Functions
+
+## Test Env
+
+```js
 BNB TestNet:
 
 pancakeSwapRouter:   0xCc7aDc94F3D80127849D2b41b6439b7CF1eB4Ae0
@@ -29,4 +61,3 @@ StakerProxy: come soon...
 
 
 ```
-
