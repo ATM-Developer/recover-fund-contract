@@ -1,6 +1,6 @@
 # ATM RecoverFund Contract
 
-## Contratc Details
+## Contract Details
 
 ### 1. RecoverFund
 
