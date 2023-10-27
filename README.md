@@ -30,21 +30,52 @@
 
 #### Write Functions
 
-**1.8 deny**: `deny(address)` rely a address, then that can sent and vote proposal
+**1.6 rely**: `rely(address)` rely a address, then that address will get right to sent and vote proposal
 
-**1.8 rely**: `rely(address)` rely a address
+**1.7 deny**: `deny(address)` deny a address, then that address will lost right
 
 **1.8 sentProposal**: `sentProposal(uint256)` sent a buyback proposal
 
-**1.8 vote**: `vote(bool)` vote for new proposal
+**1.9 vote**: `vote(bool)` vote for new proposal
 
 ---
 
 ### 2. Staker
+```js
+        struct StakingInfo {
+        uint256 stakedAmount;
+        uint256 stakingStartTime;
+        uint256 lastClaimTime;
+        uint256 totalRewardsEarned;
+    }
+    
+```
 
 #### Reade Functions
 
+**2.1 startTime**: return a `uint256` number that is timestemp of activite start
+
+**2.2 endTime**: return a `uint256` number that is timestemp of activite end
+
+**2.3 rewardRate**: return a `uint256` number that represents reward speed per LUCA per second
+
+**2.4 stakeTop**: return a `uint256` number that is the limit of stake
+
+**2.5 totalRewards**: return a `uint256` number that is the total number of reward
+
+**2.6 tatalStaked**: retuer a `uint256` number that is the number of staked
+
+**2.7 calculateStakeReward**: `calculatePendingReward(address)` return a `uint256` number that is the number of rewrad
+
+**2.8 stakingInfo** `stakingInfo(address)` return a struct `StakingInfo`
+
 #### Write Functions
+
+**2.9 stake**: `stake(uint256)` stake LUCA, need approve LUCA for staker contarct befor call this function
+
+**2.10 unstake**: unstake LUCA
+
+**2.11 claiReward**: claim reward
 
 ## Test Env
 
@@ -57,7 +88,5 @@ BUSD:   0xE0dFffc2E01A7f051069649aD4eb3F518430B6a4
 Pair:   0x36b20fDB728771484bd7F9E5b124A19272c1FDC0
 
 RecoverFundProxy: 0xA1AE8ab06202a94eb10Fc14e8263D26bC5D898F2
-StakerProxy: come soon...
-
-
+StakerProxy: 0x7fe395a1200F7f7879AA992130Fe5f610c6e318D
 ```
