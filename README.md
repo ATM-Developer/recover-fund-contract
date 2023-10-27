@@ -1,18 +1,24 @@
-# ATM RecoverFund Contract
+# ATM RecoverFund Contracts
+
+## Intraduction
+
+On the basis of ATM [recover plan](https://www.atm.network/#/noticeDetails?id=66 ), this project including two major contracts `RcoverFund` and `Staker`. The function of RecoverFund is allow users to invest `USDC` and allow mangers sent proposal to buyback `LUCA` or vote for proposal. And the Staker contract allow the invester to stake `LUCA` and get rewards.
+
 
 ## Contract Details
 
 ### 1. RecoverFund
 
 ```js
+    //A proposal passed represents will spent a specific number of USDC to buyback and burn LUCA  
     struct Proposal{
-        address sender;   
-        uint256 cost;     
-        uint256 expire;
-        uint256 line;
-        address[] agree;
-        address[] disagree;
-        uint256 statu; //0: pending; 1: passed; 2: unpassed
+        address     sender;   //proposal sender
+        uint256     cost;     //the number of USDC 
+        uint256     expire;   //expire time
+        uint256     line;     //current pass threshould
+        address[]   agree;    //agree list
+        address[]   disagree; //disagree list
+        uint256     statu;    //0: pending;  1: passed;  2: unpassed
     }
 ```
 
@@ -41,13 +47,25 @@
 ---
 
 ### 2. Staker
+
+The Staker contract allow inverster to stake specific number of `LUCA`, and the number decide on how much USDC user have invested. The mortgage activity lasts for eight years, once a year for three months each time.
+The maximum mortgage allowed in each campaign is `700,000` `LUCA` and the total reward is `300,000` `LUCA`.
+
+`Note: The stake activit need after inverst end`
+
 ```js
-        struct StakingInfo {
-        uint256 stakedAmount;
-        uint256 stakingStartTime;
-        uint256 lastClaimTime;
-        uint256 totalRewardsEarned;
+    //staking info 
+    struct StakingInfo {
+        uint256     stakedAmount;
+        uint256     stakingStartTime;
+        uint256     lastClaimTime;
+        uint256     totalRewardsEarned;
     }
+   
+   //key words
+   rewardRate = totalRewards / takeTop / 90 days     
+   rewards = takeTime * rewardRate * stakedAmount 
+
     
 ```
 
@@ -88,5 +106,5 @@ BUSD:   0xE0dFffc2E01A7f051069649aD4eb3F518430B6a4
 Pair:   0x36b20fDB728771484bd7F9E5b124A19272c1FDC0
 
 RecoverFundProxy: 0xA1AE8ab06202a94eb10Fc14e8263D26bC5D898F2
-StakerProxy: 0x7fe395a1200F7f7879AA992130Fe5f610c6e318D
+StakerProxy: 0x4793e9CA5AFfCe4c7FB54fc99cECA0CeBE46fFB6
 ```
