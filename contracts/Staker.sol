@@ -63,7 +63,9 @@ contract Staker is Admin, Initialize {
         }
 
         //uint256 stakingDuration = block.timestamp - stakingStartTime;
-        uint256 unclaimedDuration = block.timestamp - lastClaimTime;
+        uint256 unclaimedDuration = block.timestamp < endTime
+            ? block.timestamp - lastClaimTime
+            : endTime - lastClaimTime;
 
         uint256 reward = (stakedAmount * rewardRate * unclaimedDuration) / 1e27;
 
@@ -71,6 +73,10 @@ contract Staker is Admin, Initialize {
     }
 
     function stake(uint256 amount) external auth {
+        require(
+            block.timestamp > startTime && block.timestamp < endTime,
+            "Staker: Activit not start or ended"
+        );
         StakingInfo storage userStaking = stakingInfo[msg.sender];
         require(
             amount > 0 &&
