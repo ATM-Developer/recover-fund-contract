@@ -37,7 +37,7 @@ contract PancakeHelper {
         path[0] = tokenIn;
         path[1] = tokenOut;
 
-        require(IERC20(tokenIn).approve(address(this), amountIn), "Approval failed");
+        require(IERC20(tokenIn).approve(pancakeRouter, amountIn), "Approval failed");
 
         IPancakeRouter02(pancakeRouter).swapExactTokensForTokens(
             amountIn,
