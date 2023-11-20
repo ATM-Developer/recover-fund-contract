@@ -14,8 +14,8 @@ contract Staker is Admin, Initialize {
     uint256 public SEASON;
 
     struct StakerInfo{                   // Staker activit information
-        uint256 unclaimRewards;          // 300,000 LUCA per season
-        uint256 stakeTop;                // 700,000 LUCA per season
+        uint256 unclaimRewards;          // 300,000 LUCA per season in the beging process
+        uint256 totalSpace;              // 700,000 LUCA per season 
         uint256 rewardRate;              // reward of per token per second
         uint256 startTime;               // start of current activit
         uint256 endTime;                 // end of current activit
@@ -52,7 +52,7 @@ contract Staker is Admin, Initialize {
         IERC20(LUCA).transfer(address(this), 300000e18);
         stakerInfo[season] = StakerInfo(                
             300000e18,                                //totalreward
-            700000e18,                                //stakeTop
+            700000e18,                                //stakespace
             55114638447971781305,                     //rewardRate = totalreward * 1e27 / stakeTop / 90 days
             start,                                    //startTime
             start+ 90 days,                           //endTime
@@ -65,8 +65,8 @@ contract Staker is Admin, Initialize {
         return block.timestamp >= s.startTime && block.timestamp <= s.endTime;
     }
 
-    function calculateStakeLimit(address user) public view returns (uint256) {
-        return (FUND.investOf(user) * stakerInfo[SEASON].stakeTop) / FUND.totalFund();
+    function calculateStakeSpace(address user) public view returns (uint256) {
+        return (FUND.investOf(user) * stakerInfo[SEASON].totalSpace) / FUND.totalFund();
     }
 
     function calculatePendingReward(uint256 season, address user) internal view returns (uint256) {
@@ -79,7 +79,7 @@ contract Staker is Admin, Initialize {
         return (u.stakedAmount * s.rewardRate * unclaimedDuration) / 1e27;
     }
 
-    function stake(uint256 amount) external auth {
+    function stake(uint256 amount) public auth {
         StakerInfo storage s = stakerInfo[SEASON];
         require(
             block.timestamp > s.startTime && block.timestamp < s.endTime,
@@ -88,8 +88,8 @@ contract Staker is Admin, Initialize {
         
         StakingInfo storage u = stakingInfo[SEASON][msg.sender];
         require(
-            amount > 0 && u.stakedAmount + amount <=calculateStakeLimit(msg.sender),
-            "Staker: Amount out of limlt"
+            amount > 0 && u.stakedAmount + amount <= calculateStakeSpace(msg.sender),
+            "Staker: Amount out of user space"
         );
         if (u.stakedAmount > 0) {
             uint256 pendingReward = calculatePendingReward(SEASON, msg.sender);
@@ -110,9 +110,14 @@ contract Staker is Admin, Initialize {
         emit Staked(msg.sender, amount);
     }
 
-    function unstake() external {
-        StakerInfo storage s = stakerInfo[SEASON];
-        StakingInfo storage u= stakingInfo[SEASON][msg.sender];
+    function unstake() public {
+        unstake(SEASON);
+    }
+
+    function unstake(uint256 season) public {
+        require(season <= SEASON, "Staker: season err");
+        StakerInfo storage s = stakerInfo[season];
+        StakingInfo storage u= stakingInfo[season][msg.sender];
         require(u.stakedAmount > 0, "Staker: No tokens staked");
 
         uint256 pendingReward = calculatePendingReward(SEASON, msg.sender);
@@ -134,12 +139,12 @@ contract Staker is Admin, Initialize {
         emit Unstaked(msg.sender, stakedAmount, pendingReward);
     }
 
-    function claimReward() external {
-        StakerInfo storage s = stakerInfo[SEASON];
-        StakingInfo storage u = stakingInfo[SEASON][msg.sender];
+    function claimReward(uint256 season) public {
+        StakerInfo storage s = stakerInfo[season];
+        StakingInfo storage u = stakingInfo[season][msg.sender];
         require(u.stakedAmount > 0, "No tokens staked");
 
-        uint256 pendingReward = calculatePendingReward(SEASON, msg.sender);
+        uint256 pendingReward = calculatePendingReward(season, msg.sender);
         require(pendingReward > 0, "No pending reward to claim");
 
         u.lastClaimTime = block.timestamp;
@@ -147,5 +152,9 @@ contract Staker is Admin, Initialize {
         LUCA.transfer(msg.sender, pendingReward);
 
         emit RewardClaimed(msg.sender, pendingReward);
+    }
+
+    function claimReward() public {
+        claimReward(SEASON);
     }
 }

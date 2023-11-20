@@ -40,8 +40,7 @@ contract Staker is Admin, Initialize {
 
     event Staked(address indexed user, uint256 season, uint256 amount);
     event Unstaked(address indexed user, uint256 season, uint256 amount, uint256 reward);
-    //event RewardClaimed(address indexed user, uint256 reward);
-
+    
     modifier auth() {
         require(FUND.investOf(msg.sender) > 0, "Stake: Only invester can call");
         _;
