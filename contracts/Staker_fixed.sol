@@ -47,9 +47,6 @@ contract Staker is Admin, Initialize {
         _;
     }
 
-
-
-
     function init(address luca, address fund) public noinit {
         (LUCA, FUND) = (IERC20(luca), Ifund(fund));
         SEASON = 1;
@@ -62,10 +59,10 @@ contract Staker is Admin, Initialize {
         stakerInfo[season] = StakerInfo(
             300000e18,                                //totalreward
             700000e18,                                //stakeTop
-            //0,  TODO: new unmber                    //rewardRate = totalreward / stakeTop 
+            428571428571428571428571428,              //rewardRate = totalreward * 1e27 / stakeTop 
             90 days,                                  //lock duration
-            start,                                  //startTime
-            start+ 90 days,                         //endTime
+            start,                                    //startTime
+            start+ 90 days,                           //endTime
             0                                         //totalStaked
         );
     }
@@ -85,8 +82,8 @@ contract Staker is Admin, Initialize {
         return ((FUND.investOf(user) * 700000e18) / FUND.totalFund()) - staked;
     }
 
-    function calculateReward(uint256 staked) internal pure returns (uint256) {
-        return staked * stakerInfo[SEASON].rewardRate;
+    function calculateReward(uint256 staked) internal view returns (uint256) {
+        return staked * stakerInfo[SEASON].rewardRate / 1e27;
     }
 
     function stake(uint256 amount) external auth returns (uint256) {
@@ -144,7 +141,5 @@ contract Staker is Admin, Initialize {
 
             emit Unstaked(msg.sender, season, u.stakedAmount, reward);
         }
-
-    }
-        
+    } 
 }

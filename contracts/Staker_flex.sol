@@ -53,9 +53,9 @@ contract Staker is Admin, Initialize {
         stakerInfo[season] = StakerInfo(                
             300000e18,                                //totalreward
             700000e18,                                //stakeTop
-            55114638447971781305,                     //rewardRate = totalreward * stakeTop / 90 days
-            start,                                  //startTime
-            start+ 90 days,                         //endTime
+            55114638447971781305,                     //rewardRate = totalreward * 1e27 / stakeTop / 90 days
+            start,                                    //startTime
+            start+ 90 days,                           //endTime
             0                                         //totalStaked
         );
     }
