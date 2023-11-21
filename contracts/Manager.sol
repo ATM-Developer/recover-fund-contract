@@ -60,8 +60,9 @@ contract Manager {
 
         pId++;
         address[] memory nullList;
-        proposals[pId] = Proposal(msg.sender, cost, block.timestamp + validtime, line, nullList, nullList, 0);
-        emit SentProposal(pId, msg.sender, cost);
+        uint256 amount = cost * 1e18;
+        proposals[pId] = Proposal(msg.sender, amount, block.timestamp + validtime, line, nullList, nullList, 0);
+        emit SentProposal(pId, msg.sender, amount);
         return pId;
     }
 
