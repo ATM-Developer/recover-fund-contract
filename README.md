@@ -9,19 +9,6 @@ On the basis of ATM [recover plan](https://www.atm.network/#/noticeDetails?id=66
 
 ### 1. RecoverFund
 
-```js
-    //A proposal passed represents will spent a specific number of USDC to buyback and burn LUCA  
-    struct Proposal{
-        address     sender;   //proposal sender
-        uint256     cost;     //the number of USDC 
-        uint256     expire;   //expire time
-        uint256     line;     //current pass threshould
-        address[]   agree;    //agree list
-        address[]   disagree; //disagree list
-        uint256     statu;    //0: pending;  1: passed;  2: unpassed
-    }
-```
-
 #### Reade Functions
 
 **1.1 totalFund**: return a `uint256` number that represents how much `USDC` have been fund
@@ -30,19 +17,15 @@ On the basis of ATM [recover plan](https://www.atm.network/#/noticeDetails?id=66
 
 **1.3 investOf**:  `investOf(address)` query funded amount by address
 
-**1.4 pId**:  return a `uint256` number that represents how much `Proposal` have been sent
-
-**1.5 proposal**: `proposal(uint256)` query a `Proposal` infomation by `pId`
+**1.4 Buybacker**: return a `address` that is the contract address of the `buyback` operator
 
 #### Write Functions
 
-**1.6 rely**: `rely(address)` rely a address, then that address will get right to sent and vote proposal
+**1.5 invest**: `invest(uint256)` invest `USDC` to recoverFund contract
 
-**1.7 deny**: `deny(address)` deny a address, then that address will lost right
+**1.6 buybackAndBurn**:  cost `USDC` to buyback `LUCA` and burn it, only `Buybacker` can call this function
 
-**1.8 sentProposal**: `sentProposal(uint256)` sent a buyback proposal
-
-**1.9 vote**: `vote(bool)` vote for new proposal
+**1.7 setBuybacker**: setup `Buybacker` address, only ATM manager contract can call this function
 
 ---
 
@@ -94,6 +77,15 @@ The maximum mortgage allowed in each campaign is `700,000` `LUCA` and the total 
 **2.10 unstake**: unstake LUCA
 
 **2.11 claiReward**: claim reward
+
+
+### 3. Staker_flex (Staker plus 1)
+this contract based on the Staker contarct, due to support multiple staker rewards
+
+
+
+
+
 
 ## contracts
 

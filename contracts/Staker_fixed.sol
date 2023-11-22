@@ -47,16 +47,15 @@ contract Staker is Admin, Initialize {
 
     function init(address luca, address fund) public noinit {
         (LUCA, FUND) = (IERC20(luca), Ifund(fund));
-        //SEASON = 1;
     }
 
-    function setStaker(uint256 season, uint256 start) public {
+    function setStaker(uint256 start) public {
         require(block.timestamp > stakerInfo[SEASON].endTime, "Staker: Activity in progress");
-        require(season == SEASON++, "Staker: invalid season");
+        SEASON++;
         
         IERC20(LUCA).transferFrom(msg.sender, address(this), 300000e18);
         _id = 0;
-        stakerInfo[season] = StakerInfo(
+        stakerInfo[SEASON] = StakerInfo(
             300000e18,                                //totalreward
             700000e18,                                //stakeTop
             428571428571428571428571428,              //rewardRate = totalreward * 1e27 / stakeTop 
