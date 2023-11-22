@@ -51,10 +51,10 @@ contract Staker is Admin, Initialize {
     }
 
     function setStaker(uint256 season, uint256 start) public {
-        require(block.timestamp > stakerInfo[SEASON].endTime, "Staker: activit aliving");
+        require(block.timestamp > stakerInfo[SEASON].endTime, "Staker: Activity in progress");
         require(season == SEASON++, "Staker: invalid season");
         
-        IERC20(LUCA).transfer(address(this), 300000e18);
+        IERC20(LUCA).transferFrom(msg.sender, address(this), 300000e18);
         _id = 0;
         stakerInfo[season] = StakerInfo(
             300000e18,                                //totalreward
