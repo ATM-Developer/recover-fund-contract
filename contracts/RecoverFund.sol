@@ -12,25 +12,18 @@ import "contracts/Fund.sol";
 /// @notice user can invest in this contarct, and managers can sent a proposal to spent funds to buyback and burn LUCA  
 contract RecoverFund is Admin, Manager, Fund, PancakeHelper, Initialize {
     address public LUCA;
+    address public Buybacker;
 
     function _setLUCA(address luca) internal {
         LUCA = luca;
     }
 
-    // wrapping Manager contract
-    function set(uint256 t, uint256 r) public admin {
-        _set(t, r);
+    function setBuybacker(address buybacker) admin public {
+        Buybacker = buybacker;
     }
 
-    function rely(address guy) public admin {
-        _rely(guy);
-    }
-
-    function deny(address guy) public admin {
-        _deny(guy);
-    }
-
-    function afterPass(uint256 tokenIn) internal override {
+    function buybackeAndBurn(uint256 tokenIn) external {
+        require(msg.sender == Buybacker,  "Only Buybacker");
         _buybackAndBurn(USDC, LUCA, tokenIn);
     }
 
@@ -38,18 +31,11 @@ contract RecoverFund is Admin, Manager, Fund, PancakeHelper, Initialize {
         address router,
         address luca,
         address usdc,
-        uint256 votetime,
-        uint256 thershold,
-        uint256 endtime,
-        address[] calldata mngs
+        uint256 endtime
     ) external noinit {
         _setRouter(router);
         _setUSDC(usdc);
         _setLUCA(luca);
         _setEndtime(endtime);
-        _set(votetime, thershold);
-        for (uint i = 0; i < mngs.length; i++) {
-            _rely(mngs[i]);
-        }
     }
 }

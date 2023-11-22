@@ -5,7 +5,6 @@ import "contracts/common/Proxy.sol";
 
 contract StakerProxy is Proxy{
     constructor(address staker){
-        
         _setLogic(staker);
         _setAdmin(msg.sender);
     }

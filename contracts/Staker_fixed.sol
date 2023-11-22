@@ -9,7 +9,6 @@ import "contracts/common/Initialize.sol";
 /// @title Staker contarct
 /// @notice Only inverster of RecoverFund can staking. once LUCA be staked, that will be locked 90 days. 
 contract Staker is Admin, Initialize {
-
     IERC20  public LUCA;
     Ifund   public FUND;
     uint256 public SEASON;
@@ -60,8 +59,8 @@ contract Staker is Admin, Initialize {
             700000e18,                                //stakeTop
             428571428571428571428571428,              //rewardRate = totalreward * 1e27 / stakeTop 
             90 days,                                  //lock duration
-            start,                                    //startTime
-            start+ 90 days,                           //endTime
+            start,                                  //startTime
+            start+ 90 days,                         //endTime
             0                                         //totalStaked
         );
     }

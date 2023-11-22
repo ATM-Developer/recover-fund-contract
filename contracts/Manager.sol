@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 /// @title manager of the funds
 /// @notice any one which in the managers can give or vote buyback proposal
-contract Manager {
+contract Manager { //Deprecated
+    /* 
     mapping(address => uint256) public managers;   //map of managers
     uint256 public total;                          //total of managers
     
@@ -22,6 +23,8 @@ contract Manager {
     uint256 public validtime;                    //proposal valid time
     uint256 public line;                         //proposal vote thershold
     mapping (uint256 => Proposal) internal proposals;
+
+    
 
     modifier auth() {
         require(managers[msg.sender]==1, "Manager: only manager");
@@ -97,4 +100,24 @@ contract Manager {
 
 
     function afterPass(uint256) internal virtual {} 
+
+    */
+
+    /// the contarct upgrade need keep the old variables, and change the type to internal
+    mapping(address => uint256) internal managers;      //Deprecated
+    uint256 internal total;                             //Deprecated
+    struct Proposal{
+        address sender;
+        uint256 cost;
+        uint256 expire;
+        uint256 line;
+        address[] agree;
+        address[] disagree;
+        uint256 statu; //0: pending; 1: passed; 2: unpassed
+    }
+
+    uint256 internal pId;                               //Deprecated
+    uint256 internal validtime;                         //Deprecated
+    uint256 internal line;                              //Deprecated
+    mapping (uint256 => Proposal) internal proposals;   //Deprecated
 }
