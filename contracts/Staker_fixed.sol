@@ -47,7 +47,7 @@ contract Staker is Admin, Initialize {
 
     function init(address luca, address fund) public noinit {
         (LUCA, FUND) = (IERC20(luca), Ifund(fund));
-        SEASON = 1;
+        //SEASON = 1;
     }
 
     function setStaker(uint256 season, uint256 start) public {
