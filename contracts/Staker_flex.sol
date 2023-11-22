@@ -47,15 +47,17 @@ contract Staker is Admin, Initialize {
         SEASON = 1;
     }
 
-    function setStaker(uint256 season, uint256 start) public admin{
+    function setStaker(uint256 season, uint256 start) public {
+        require(block.timestamp > stakerInfo[SEASON].endTime, "Staker: Activity in progress");
         require(season == SEASON++, "Staker: invalid season");
-        IERC20(LUCA).transfer(address(this), 300000e18);
+        IERC20(LUCA).transferFrom(msg.sender, address(this), 300000e18);
+
         stakerInfo[season] = StakerInfo(                
             300000e18,                                //totalreward
             700000e18,                                //stakespace
             55114638447971781305,                     //rewardRate = totalreward * 1e27 / stakeTop / 90 days
-            start,                                    //startTime
-            start+ 90 days,                           //endTime
+            start,                                  //startTime
+            start+ 90 days,                         //endTime
             0                                         //totalStaked
         );
     }

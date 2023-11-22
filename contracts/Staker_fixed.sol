@@ -41,7 +41,7 @@ contract Staker is Admin, Initialize {
     event Unstaked(address indexed user, uint256 season, uint256 amount, uint256 reward);
     
     modifier auth() {
-        require(FUND.investOf(msg.sender) > 0, "Stake: Only invester can call");
+        require(FUND.investOf(msg.sender) > 0, "Staker: Only invester can call");
         _;
     }
 
@@ -50,8 +50,10 @@ contract Staker is Admin, Initialize {
         SEASON = 1;
     }
 
-    function setStaker(uint256 season, uint256 start) public admin{
+    function setStaker(uint256 season, uint256 start) public {
+        require(block.timestamp > stakerInfo[SEASON].endTime, "Staker: activit aliving");
         require(season == SEASON++, "Staker: invalid season");
+        
         IERC20(LUCA).transfer(address(this), 300000e18);
         _id = 0;
         stakerInfo[season] = StakerInfo(
