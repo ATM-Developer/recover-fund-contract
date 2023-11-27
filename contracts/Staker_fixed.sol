@@ -71,7 +71,9 @@ contract Staker is Admin, Initialize {
         return block.timestamp >= s.startTime && block.timestamp <= s.endTime;
     }
 
+    //stake_space: invest_ratio * maxstake_space
     function calculateStakeSpace(address user) public view returns (uint256) {
+        
         uint256 staked; 
         uint256[] memory stakedIds = _stakings[msg.sender][SEASON];
         for(uint256 i = 0; i < stakedIds.length; i++){
@@ -85,9 +87,16 @@ contract Staker is Admin, Initialize {
         return staked * stakerInfo[SEASON].rewardRate / 1e27;
     }
 
+    function getStakeds(uint256 season, address user) public view returns (StakingInfo[] memory stakeds) {
+        uint256[] memory ids = _stakings[user][season];
+        for(uint256 i = 0; i < ids.length; i++){
+            stakeds[i] = stakingInfo[season][ids[i]];
+        }
+    }
+
     function stake(uint256 amount) external auth returns (uint256) {
         StakerInfo storage s = stakerInfo[SEASON];
-        require(block.timestamp > s.startTime && block.timestamp < s.endTime, "Staker: Activit not start or ended");
+        require(block.timestamp > s.startTime && block.timestamp < s.endTime, "Staker: Activity not start or ended");
         require(amount <= s.stakeableSpace && amount <= calculateStakeSpace(msg.sender),"Staker: Amount out of space");
       
         LUCA.transferFrom(msg.sender, address(this), amount);
