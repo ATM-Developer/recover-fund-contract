@@ -103,5 +103,5 @@ Buybacker contract is the only operator of `buybackAndBurn` by `execBuyback(uint
 | USDC         | 0xE0dFffc2E01A7f051069649aD4eb3F518430B6a4 | 0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d |
 | Router       | 0xCc7aDc94F3D80127849D2b41b6439b7CF1eB4Ae0 | 0x10ED43C718714eb63d5aA57B78B54704E256024E |
 | RecoverFund  | 0xA1AE8ab06202a94eb10Fc14e8263D26bC5D898F2 | 0xcBa0D4bd0A6aDadA793592823524C1Ccb670EcD1 |
-| Buybacker    | coming soon... | 0xdF38c05520378991d107E27d32d86B85Ff8b7472 |
+| Buybacker    | 0x73C51Afe44ae68346B451fd9382Ad6D623e71856 | 0xdF38c05520378991d107E27d32d86B85Ff8b7472 |
 | Staker       | coming soon... | coming soon... |
