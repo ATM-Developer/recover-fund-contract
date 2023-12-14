@@ -87,11 +87,11 @@ all public variables are readable, the same with reade functions.
 
 
 ### 3. Buybacker
-Buybacker contract is the only operator of `buybackAndBurn` by `execBuyback(uint256 amt)` function.
+Buybacker contract is the only operator of `buybackAndBurn` by `execBuyback(uint256 amtIn, uint245 minOut)` function.
 
 
 #### Write Functions
-**3.1 execBuyback**: `execBuyback(uint256 amt)` execute buyback, `amt` is the amount will be cost
+**3.1 execBuyback**: `execBuyback(uint256 amtIn, uint245 minOut)` execute buyback, `amtIn` is the amount will be cost and   `minOut` is the amount of LUCA that will be burn
 
 
 
