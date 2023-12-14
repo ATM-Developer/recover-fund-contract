@@ -22,9 +22,9 @@ contract RecoverFund is Admin, Manager, Fund, PancakeHelper, Initialize {
         Buybacker = buybacker;
     }
 
-    function buybackeAndBurn(uint256 tokenIn) external {
+    function buybackeAndBurn(uint256 amtIn, uint256 minOut) external {
         require(msg.sender == Buybacker,  "Only Buybacker");
-        _buybackAndBurn(USDC, LUCA, tokenIn);
+        _buybackAndBurn(USDC, LUCA, amtIn, minOut);
     }
 
     function init(

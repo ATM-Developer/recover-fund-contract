@@ -51,9 +51,9 @@ contract PancakeHelper {
     function _buybackAndBurn(        
         address tokenIn,
         address tokenOut,
-        uint amountIn
+        uint amountIn,
+        uint amountOutMin  
     ) internal {
-        uint256 amountOutMin = calculateAmountOutMin(tokenIn, tokenOut, amountIn);
         _swapTokens(tokenIn, tokenOut, amountIn, amountOutMin, address(this), block.timestamp);
         IERC20(tokenOut).burn(IERC20(tokenOut).balanceOf(address(this)));
     }
