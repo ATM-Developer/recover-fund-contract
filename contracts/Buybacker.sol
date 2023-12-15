@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "contracts/interface/IPancakeRouter02.sol";
+
 interface IrecoverFund {
       function buybackeAndBurn(uint256 amtIn, uint256 minut) external;
       function balance() external returns(uint256);
@@ -10,16 +12,31 @@ interface IrecoverFund {
 contract Buybacker {
       address public recoverFund;
       address public operator;
+      address public pancakeRouter;
+      address public tokenIn; //USDC, LUCA
+      address public tokenOut;
       mapping(uint256=>uint256) public cost; 
 
       uint256 constant dailyMaxCost = 30000e18;
 
       event BuybackeEvent(uint256 indexed dayIndex,uint256 timestamp, uint256 amount);
 
-      constructor(address _recoverFund, address _operator){
+      constructor(address _recoverFund, address _router, address usdc, address luca, address _operator){
             recoverFund = _recoverFund;
+            pancakeRouter = _router;
             operator = _operator;
+            tokenIn = usdc;
+            tokenOut = luca;
       }
+
+      function calculateAmountOutMin(uint amountIn) public view returns (uint) {
+            address[] memory path = new address[](2);
+            path[0] = tokenIn;
+            path[1] = tokenOut;
+            uint[] memory amounts = IPancakeRouter02(pancakeRouter).getAmountsOut(amountIn, path);
+            return amounts[1]; 
+      }
+
 
       function execBuyback(uint256 amt) external{
             require(block.timestamp > IrecoverFund(recoverFund).endtime(),"Only after recoverFund end");
@@ -34,9 +51,10 @@ contract Buybacker {
             cost[day] += amount;
             require(cost[day] <= dailyMaxCost, "Out of daily max cost");
 
-            IrecoverFund(recoverFund).buybackeAndBurn(amount, 0);
+            IrecoverFund(recoverFund).buybackeAndBurn(amount, calculateAmountOutMin(amount));
             emit BuybackeEvent(day, block.timestamp, amount);    
       }
+      
 
       function execBuyback(uint256 amtIn, uint256 minOut) external{
             require(block.timestamp > IrecoverFund(recoverFund).endtime(),"Only after recoverFund end");
