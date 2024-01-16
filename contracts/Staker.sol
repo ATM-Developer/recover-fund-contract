@@ -87,11 +87,14 @@ contract Staker is Admin, Initialize {
         return staked * stakerInfo[SEASON].rewardRate / 1e27;
     }
 
-    function getStakeds(uint256 season, address user) public view returns (StakingInfo[] memory stakeds) {
+    function getStakeds(uint256 season, address user) public view returns (StakingInfo[] memory) {
         uint256[] memory ids = _stakings[user][season];
+        StakingInfo[] memory stakeds = new StakingInfo[](ids.length);
         for(uint256 i = 0; i < ids.length; i++){
             stakeds[i] = stakingInfo[season][ids[i]];
         }
+
+        return stakeds;
     }
 
     function stake(uint256 amount) external auth returns (uint256) {
